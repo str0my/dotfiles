@@ -57,7 +57,7 @@ if [ -d $HOME/.rvm ]; then
   source $HOME/.rvm/scripts/rvm
 fi
 
-#fix $LS_COLORS
+#fix $LS_COLORS for windows shared folders
 LS_COLORS=$LS_COLORS:'tw=0;34:ow=0;34:'
 export LS_COLORS
 
