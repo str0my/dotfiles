@@ -21,4 +21,4 @@ vcs_status() {
     fi
 }
 
-PROMPT='%{$fg[green]%}%2~ $(vcs_status)»%b '
+PROMPT='%{$fg[green]%}%2~ %{$reset_color%}$(vcs_status)»%b '
