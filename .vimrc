@@ -105,4 +105,5 @@ vmap <C-v> <Plug>(expand_region_shrink)
 
 " Colorscheme
 set background=dark
+let g:solarized_termtrans = 1
 colorscheme solarized
