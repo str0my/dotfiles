@@ -29,11 +29,19 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(repo python history-substring-search vagrant tmux encode64 history jsontools osx urltools web-search vi-mode)
+plugins=(git repo python history-substring-search vagrant tmux encode64 history jsontools osx urltools web-search vi-mode)
 
 source $ZSH/oh-my-zsh.sh
 
 # Customize to your needs...
+
+# z - jumpin around!!
+
+. /usr/local/etc/profile.d/z.sh
+
+# t - taskmanager
+
+alias t='python ~/Documents/workspace/code/t/t.py --task-dir ~/.tasks --list tasks'
 
 # Vim :)
 export EDITOR=vim

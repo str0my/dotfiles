@@ -4,12 +4,14 @@ call plug#begin("~/.vim/plugins")
 Plug 'scrooloose/nerdtree'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'ervandew/supertab'
-"Plug 'edkolev/tmuxline.vim'
+Plug 'edkolev/tmuxline.vim'
 
 "Look & feel
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'altercation/vim-colors-solarized'
+Plug 'zacanger/angr.vim'
+
 
 "Movement enhancements
 Plug 'terryma/vim-expand-region'
@@ -18,11 +20,13 @@ Plug 'tpope/vim-surround'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'scrooloose/nerdcommenter'
 
+" OS X Only
+Plug 'rizzatti/dash.vim'
 
 call plug#end()
 
 
-let g:airline_theme = 'wombat'
+let g:airline_theme = 'angr'
 let g:airline#extensions#tabline#enabled = 1
 
 " KeyBinds
@@ -43,6 +47,9 @@ noremap <leader>0 :tablast<cr>
 map <C-n> :NERDTreeToggle<CR>
 
 " Global Settings
+" CTags setup
+set tags=./tags;/
+
 " IMproved mode
 set nocompatible 
 
@@ -104,6 +111,10 @@ vmap v <Plug>(expand_region_expand)
 vmap <C-v> <Plug>(expand_region_shrink)
 
 " Colorscheme
-set background=dark
+set background=
+" solarized options 
+"let g:solarized_visibility = "high"
+"let g:solarized_contrast = "high"
 let g:solarized_termtrans = 1
-colorscheme solarized
+let g:solarized_visibility = "high"
+colorscheme angr
