@@ -1,3 +1,4 @@
+let g:python2_host_prog = '/usr/bin/python'
 " Plugin Manager
 call plug#begin("~/.vim/plugins")
 
@@ -11,6 +12,7 @@ Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'altercation/vim-colors-solarized'
 Plug 'zacanger/angr.vim'
+Plug 'ayu-theme/ayu-vim'
 
 
 "Movement enhancements
@@ -22,6 +24,7 @@ Plug 'scrooloose/nerdcommenter'
 
 " OS X Only
 Plug 'rizzatti/dash.vim'
+Plug 'neilagabriel/vim-geeknote'
 
 call plug#end()
 
@@ -115,6 +118,14 @@ set background=
 " solarized options 
 "let g:solarized_visibility = "high"
 "let g:solarized_contrast = "high"
-let g:solarized_termtrans = 1
-let g:solarized_visibility = "high"
-colorscheme angr
+"let g:solarized_termtrans = 1
+"let g:solarized_visibility = "high"
+"
+set termguicolors     " enable true colors support
+"let ayucolor="light"  " for light version of theme
+"let ayucolor="mirage" " for mirage version of theme
+let ayucolor="mirage"   " for dark version of theme
+colorscheme ayu
+"transparent background
+hi! Normal ctermbg=NONE guibg=NONE
+hi! NonText ctermbg=NONE guibg=NONE

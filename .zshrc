@@ -37,20 +37,22 @@ source $ZSH/oh-my-zsh.sh
 
 # z - jumpin around!!
 
-. /usr/local/etc/profile.d/z.sh
+#. /usr/local/etc/profile.d/z.sh
 
-# t - taskmanager
 
-alias t='python ~/Documents/workspace/code/t/t.py --task-dir ~/.tasks --list tasks'
+# NVIM
 
-# Vim :)
+#alias vim=nvim
+
+# (N)Vim :)
 export EDITOR=vim
 
 # Path for custom binaries, scripts, etc.
 export PATH=$HOME/bin:$PATH
 
 # Some homebrew packages put executables here
-export PATH="/usr/local/sbin:$PATH"
+#export PATH="/usr/local/sbin:/opt/local/bin:/opt/local/sbin:$PATH"
+#export MANPATH="/opt/local/share/man:$MANPATH"
 
 # Set path for depot_tools
 #export PATH="$PATH:$HOME/Stuff/depot_tools"
@@ -58,6 +60,11 @@ export PATH="/usr/local/sbin:$PATH"
 
 # Path for Understand binaries
 #export PATH=$PATH:/Applications/Understand.app/Contents/MacOS
+
+# Set up virtualenvwrapper
+#export WORKON_HOME=$HOME/.virtualenvs
+#source /usr/local/bin/virtualenvwrapper_lazy.sh
+
 
 # Set up rvm if installed
 if [ -d $HOME/.rvm ]; then
@@ -76,6 +83,10 @@ export TERM=xterm-256color
 # Set correct locales
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
+
+# ctags fix for osx
+
+#alias ctags="`brew --prefix`/bin/ctags"
 
 # Good old netcat
 alias nc=ncat
@@ -265,3 +276,5 @@ mkcd() {
 #  cat $tmpfile | tr -d '\n\r' | pbcopy
 #  rm -f $tmpfile
 #}
+#export PATH="/usr/local/opt/ruby@2.3/bin:$PATH"
+#export PATH="/usr/local/lib/ruby/gems/2.3.0/bin:$PATH"
