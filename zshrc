@@ -1,6 +1,8 @@
 #Path to your oh-my-zsh configuration.
 ZSH=$HOME/.oh-my-zsh
 
+
+bindkey -v
 # Set name of the theme to load.
 # Look in ~/.oh-my-zsh/themes/
 if [ -f $ZSH/themes/stromy.zsh-theme ]; then
@@ -29,42 +31,25 @@ DISABLE_UNTRACKED_FILES_DIRTY="true"
 # Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(git repo python history-substring-search vagrant tmux encode64 history jsontools osx urltools web-search vi-mode)
+plugins=(autojump repo python history-substring-search vagrant tmux encode64 jsontools osx urltools web-search vi-mode)
 
 source $ZSH/oh-my-zsh.sh
 
-# Customize to your needs...
-
-# z - jumpin around!!
-
-#. /usr/local/etc/profile.d/z.sh
-
-
-# NVIM
-
-#alias vim=nvim
-
-# (N)Vim :)
-export EDITOR=vim
+# ToolsRC
+source ~/.toolsrc
 
 # Path for custom binaries, scripts, etc.
 export PATH=$HOME/bin:$PATH
-
-# Some homebrew packages put executables here
-#export PATH="/usr/local/sbin:/opt/local/bin:/opt/local/sbin:$PATH"
-#export MANPATH="/opt/local/share/man:$MANPATH"
 
 # Set path for depot_tools
 #export PATH="$PATH:$HOME/Stuff/depot_tools"
 #export PATH=$HOME/bin/depot_tools:$PATH
 
-# Path for Understand binaries
-#export PATH=$PATH:/Applications/Understand.app/Contents/MacOS
-
-# Set up virtualenvwrapper
-#export WORKON_HOME=$HOME/.virtualenvs
-#source /usr/local/bin/virtualenvwrapper_lazy.sh
-
+# Set up virtualenvwrapper if installed
+if [ -d $HOME/.virtualenvs ]; then
+	export WORKON_HOME=$HOME/.virtualenvs
+	source /usr/local/bin/virtualenvwrapper_lazy.sh
+fi
 
 # Set up rvm if installed
 if [ -d $HOME/.rvm ]; then
@@ -84,10 +69,6 @@ export TERM=xterm-256color
 export LC_ALL=en_US.UTF-8
 export LANG=en_US.UTF-8
 
-# ctags fix for osx
-
-#alias ctags="`brew --prefix`/bin/ctags"
-
 # Good old netcat
 alias nc=ncat
 
@@ -98,23 +79,11 @@ alias gdb='gdb -q'
 alias g++='g++ --std=c++11'
 alias clang++='clang++ --std=c++11'
 
-# IDA SDK
-#export __MAC__=1
-#export __EA64__=1
-#export MACSDK=/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk
-#export PATH=/Applications/IDA\ Pro\ 6.95/idaq.app/Contents/MacOS/idasdk695/bin:$PATH
-#alias idamake='idamake.pl 2>&1'
-
 # neovim rulez
 if hash nvim 2>/dev/null; then
   alias vim=nvim
+	export EDITOR=nvim
 fi
-
-# Clear pacman cache: Only keep the latest version of every installed package in the cache
-#alias clearcache='sudo paccache -r -k 1; sudo paccache -r -u -k 0'
-
-# Easy access to a z3 environment (OS X only)
-#alias z3py='PYTHONPATH=/usr/local/Cellar/z3/4.4.0/lib/python2.7/dist-packages/ ipython2'
 
 #
 # Uncompresses raw zlib compressed data.
@@ -239,42 +208,44 @@ mkcd() {
 #
 #
 #
-#transfer() {
-#  if [ $# -eq 0 ]; then
-#    echo "No arguments specified. Usage:\ntransfer /tmp/test.md\ncat /tmp/test.md | transfer test.md"
-#    return 1
-#  fi
-#
-#  file=$1
-#  tmpfile=$(mktemp -t transferXXX)
-#  basefile=$(basename "$file" | sed -e 's/[^a-zA-Z0-9._-]/-/g')
-#
-#  if [ -t 0 ]; then
-#    # stdin is a terminal, so assume the user wants to upload a local file/directory (as opposed to piping the data to this function).
-#    if [ ! -e $file ]; then
-#      echo "File $file doesn't exists."
-#      return 1
-#    fi
-#
-#    if [ -d $file ]; then
-#      # zip directory content and transfer.
-#      zipfile=$(mktemp -t transferXXX.zip)
-#      cd $(dirname $file) && zip -r -q - $(basename $file) >> $zipfile
-#      curl --progress-bar --upload-file "$zipfile" "https://transfer.sh/$basefile.zip" >> $tmpfile
-#      rm -f $zipfile
-#    else
-#      # transfer file.
-#      curl --progress-bar --upload-file "$file" "https://transfer.sh/$basefile" >> $tmpfile
-#    fi
-#  else
-#    # stdin is not a terminal. Presumably someone is piping something to us, so upload that.
-#    curl --progress-bar --upload-file - "https://transfer.sh/$basefile" >> $tmpfile
-#  fi
-#
-#  cat $tmpfile
-#  # Put resulting URL (without trailing whitespace) into the OS clipboard (OS X only)
-#  cat $tmpfile | tr -d '\n\r' | pbcopy
-#  rm -f $tmpfile
-#}
-#export PATH="/usr/local/opt/ruby@2.3/bin:$PATH"
-#export PATH="/usr/local/lib/ruby/gems/2.3.0/bin:$PATH"
+transfer() {
+	if [ $# -eq 0 ]; then
+		echo "No arguments specified. Usage:\ntransfer /tmp/test.md\ncat /tmp/test.md | transfer test.md"
+		return 1
+	fi
+
+	file=$1
+	tmpfile=$(mktemp -t transferXXX)
+	basefile=$(basename "$file" | sed -e 's/[^a-zA-Z0-9._-]/-/g')
+
+	if [ -t 0 ]; then
+		# stdin is a terminal, so assume the user wants to upload a local file/directory (as opposed to piping the data to this function).
+		if [ ! -e $file ]; then
+			echo "File $file doesn't exists."
+			return 1
+		fi
+
+		if [ -d $file ]; then
+			# zip directory content and transfer.
+			zipfile=$(mktemp -t transferXXX.zip)
+			cd $(dirname $file) && zip -r -q - $(basename $file) >> $zipfile
+			curl --progress-bar --upload-file "$zipfile" "https://transfer.sh/$basefile.zip" >> $tmpfile
+			rm -f $zipfile
+		else
+			# transfer file.
+			curl --progress-bar --upload-file "$file" "https://transfer.sh/$basefile" >> $tmpfile
+		fi
+	else
+		# stdin is not a terminal. Presumably someone is piping something to us, so upload that.
+		curl --progress-bar --upload-file - "https://transfer.sh/$basefile" >> $tmpfile
+	fi
+
+	cat $tmpfile
+	# Put resulting URL (without trailing whitespace) into the OS clipboard (OS X only)
+	cat $tmpfile | tr -d '\n\r' | pbcopy
+	rm -f $tmpfile
+}
+
+gui(){
+	nohup $@ &>/dev/null &
+}

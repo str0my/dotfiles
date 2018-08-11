@@ -16,7 +16,7 @@ fi
 curl -fLo ~/.vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
 
 # Fetch vimrc
-curl -s https://raw.githubusercontent.com/str0my/dotfiles/master/.vimrc > ~/.vimrc
+curl -s https://raw.githubusercontent.com/str0my/dotfiles/master/vimrc > ~/.vimrc
 
 # Install plugins
 vim +PlugInstall +qall > /dev/null

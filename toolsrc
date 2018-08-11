@@ -1,0 +1,48 @@
+#!/bin/bash
+# Config
+
+TOOLS_DIR="/opt/"
+
+#Aliases
+
+#Universal
+alias sublist3r="python $TOOLS_DIR/Sublist3r/sublist3r.py"
+alias linkfinder="python $TOOLS_DIR/LinkFinder/linkfinder.py"
+alias sqlmap="python $TOOLS_DIR/sqlmap-dev/sqlmap.py"
+alias dirsearch="python3 $TOOLS_DIR/dirsearch/dirsearch.py"
+alias ysoserial="java -jar ~$TOOLS_DIR/ysoserial.jar"
+alias gen_xbin_avi="python3 $TOOLS_DIR/ffmpeg-avi-m3u-xbin/gen_xbin_avi.py"
+alias parameth="python $TOOLS_DIR/parameth/parameth.py"
+alias brutespray="python $TOOLS_DIR/brutespray/brutespray.py"
+alias drozer="$TOOLS_DIR/drozer/bin/drozer"
+alias rtfm="$TOOLS_DIR/rtfm/rtfm.py"
+#Functions
+#AWS h/t nahamsec
+
+s3ls(){
+aws s3 ls s3://$1
+}
+
+s3cp(){
+aws s3 cp $2 s3://$1
+}
+
+#Misc h/t nahamsec
+
+mdview(){
+mdv $1 | less
+}
+
+certspotter(){
+curl -s https://certspotter.com/api/v0/certs\?domain\=$1 | jq '.[].dns_names[]' | sed 's/\"//g' | sed 's/\*\.//g' | sort -u | grep $1
+} #h/t Michiel Prins
+
+crtsh(){
+curl -s 'https://crt.sh/?q='$1  | sed 's/<\/\?[^>]\+>//g' | grep $1
+}
+
+
+ipinfo(){
+curl http://ipinfo.io/$1
+}
+
