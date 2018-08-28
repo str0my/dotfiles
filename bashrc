@@ -1,112 +1,133 @@
-# ZSH Configuration for OS X Host
-# by stromy
+# ~/.bashrc: executed by bash(1) for non-login shells.
+# see /usr/share/doc/bash/examples/startup-files (in the package bash-doc)
+# for examples
 
-#Path to your oh-my-zsh configuration.
-ZSH=$HOME/.oh-my-zsh
+# If not running interactively, don't do anything
+case $- in
+    *i*) ;;
+      *) return;;
+esac
 
-bindkey -v
-# Set name of the theme to load.
-# Look in ~/.oh-my-zsh/themes/
-if [ -f $ZSH/themes/stromy.zsh-theme ]; then
-  ZSH_THEME="stromy"
+# don't put duplicate lines or lines starting with space in the history.
+# See bash(1) for more options
+HISTCONTROL=ignoreboth
+
+# append to the history file, don't overwrite it
+shopt -s histappend
+
+# for setting history length see HISTSIZE and HISTFILESIZE in bash(1)
+HISTSIZE=1000
+HISTFILESIZE=2000
+
+# check the window size after each command and, if necessary,
+# update the values of LINES and COLUMNS.
+shopt -s checkwinsize
+
+# make less more friendly for non-text input files, see lesspipe(1)
+#[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "${debian_chroot:-}" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+# set a fancy prompt (non-color, unless we know we "want" color)
+case "$TERM" in
+    xterm-color) color_prompt=yes;;
+esac
+
+# uncomment for a colored prompt, if the terminal has the capability; turned
+# off by default to not distract the user: the focus in a terminal window
+# should be on the output of commands, not on the prompt
+force_color_prompt=yes
+
+if [ -n "$force_color_prompt" ]; then
+    if [ -x /usr/bin/tput ] && tput setaf 1 >&/dev/null; then
+    # We have color support; assume it's compliant with Ecma-48
+    # (ISO/IEC-6429). (Lack of such support is extremely rare, and such
+    # a case would tend to support setf rather than setaf.)
+    color_prompt=yes
+    else
+    color_prompt=
+    fi
+fi
+
+if [ "$color_prompt" = yes ]; then
+    if [ -f /.dockerenv ]; then
+        PS1='\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[01;31m\]$(__git_ps1)\[\033[00m\]\$ '
+    elif [ "$(id -u)" = "0" ]; then
+        PS1='\[\033[01;31m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[01;31m\]$(__git_ps1)\[\033[00m\]\$ '
+    else
+        PS1='\[\033[38;5;214m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[01;31m\]$(__git_ps1)\[\033[00m\]\$ '
+    fi
 else
-  ZSH_THEME="minimal"
+    PS1='\u@\h:\w\$ '
+fi
+unset color_prompt force_color_prompt
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    alias dir='dir --color=auto'
+    alias vdir='vdir --color=auto'
 fi
 
-# Set to this to use case-sensitive completion
-# CASE_SENSITIVE="true"
-
-# Comment this out to disable weekly auto-update checks
-# DISABLE_AUTO_UPDATE="true"
-
-# Uncomment following line if you want to disable autosetting terminal title.
-# DISABLE_AUTO_TITLE="true"
-
-# Uncomment following line if you want red dots to be displayed while waiting for completion
-COMPLETION_WAITING_DOTS="true"
-
-# Uncomment the following line if you want to disable marking untracked files
-# under VCS as dirty. This makes repository status check for large repositories
-# much, much faster.
-DISABLE_UNTRACKED_FILES_DIRTY="true"
-
-# Which plugins would you like to load? (plugins can be found in ~/.oh-my-zsh/plugins/*)
-# Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
-# Example format: plugins=(rails git textmate ruby lighthouse)
-plugins=(autojump repo python history-substring-search vagrant tmux encode64 jsontools osx urltools web-search vi-mode)
-
-source $ZSH/oh-my-zsh.sh
-
-# Misc Scripts
-if [ -d $HOME/.toolsrc ]; then
-	source $HOME/.toolsrc
-fi
-if [ -d $HOME/.ctfrc ]; then
-	source $HOME/.ctfrc
-fi
-if [ -d $HOME/.pythonrc ]; then
-	export PYTHONSTARTUP=$HOME/.pythonrc
+# enable programmable completion features (you don't need to enable
+# this, if it's already enabled in /etc/bash.bashrc and /etc/profile
+# sources /etc/bash.bashrc).
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
 fi
 
-# Path for custom binaries, scripts, etc.
-export PATH=$HOME/bin:$PATH
+__git_ps1() 
+{
+    ref=$(git symbolic-ref HEAD 2> /dev/null) || return;
+    echo " ["${ref#refs/heads/}"]";
+}
 
-# Set path for depot_tools
-#export PATH="$PATH:$HOME/Stuff/depot_tools"
-#export PATH=$HOME/bin/depot_tools:$PATH
+[ -f ~/.ctfrc ] && . ~/.ctfrc
 
-# Set up virtualenvwrapper if installed
-if [ -d $HOME/.virtualenvs ]; then
-	export WORKON_HOME=$HOME/.virtualenvs
-	source /usr/local/bin/virtualenvwrapper_lazy.sh
-fi
+export LANG="en_US.UTF-8"
+export LC_ALL="en_US.UTF-8"
 
-# Set up rvm if installed
-if [ -d $HOME/.rvm ]; then
-  export PATH=$PATH:$HOME/.rvm/bin
-  source $HOME/.rvm/scripts/rvm
-fi
+export PATH=~/bin:$PATH
+export EDITOR=vim
+export PYTHONSTARTUP="$HOME/.pythonrc"
+export CLICOLOR=1
+export TERM=screen-256color
+export PIN_ROOT="$HOME/bin/pin"
 
-
-#fix $LS_COLORS for windows shared folders
-LS_COLORS=$LS_COLORS:'tw=0;34:ow=0;34:'
-export LS_COLORS
-
-# Announce 256 bit color support
-export TERM=xterm-256color
-[ -n "$TMUX" ] && export TERM=screen-256color
-
-# Set correct locales
-export LC_ALL=en_US.UTF-8
-export LANG=en_US.UTF-8
-
+alias py="python"
+alias py3="python3"
+alias ..="cd .."
+alias gdb="gdb -q"
+alias gdbm="gdb-multiarch -q"
 alias tmux="tmux -2"
+alias rip="curl orange.tw"
+alias tip="curl --socks5 127.0.0.1:9050 orange.tw"
 alias tcurl="curl --socks5 127.0.0.1:9050 "
+alias strace="strace -ixv"
+alias ltrace="ltrace -iC"
 alias objdump="objdump -M intel"
+alias fuck="killall -9"
+alias djson="python -m json.tool"
+alias folders="find . -maxdepth 1 -type d -print0 | xargs -0 du -skh | sort -rn"
 
-# Make moving stuff error prone
+alias ll='ls -l'
+alias la='ls -Ahl'
+alias l='ls -CF'
 alias rm="rm -i"
 alias mv="mv -i"
 alias cp="cp -i"
 
-# Quick python 
-alias py="python"
-
-# Good old netcat
-alias nc=ncat
-
-# Less gdb output
-alias gdb='gdb -q'
-
-# Use C++11 standard by default
-alias g++='g++ --std=c++11'
-alias clang++='clang++ --std=c++11'
-
-# neovim rulez
-if hash nvim 2>/dev/null; then
-  alias vim=nvim
-	export EDITOR=nvim
-fi
+alias grep='grep --color=auto'
+alias fgrep='fgrep --color=auto'
+alias egrep='egrep --color=auto'
 
 # Less Colors for Man Pages
 export PAGER="$(which less) -s"
@@ -118,6 +139,30 @@ export LESS_TERMCAP_se=$'\E[38;5;231m'  # end standout-mode
 export LESS_TERMCAP_so=$'\E[38;5;167m'  # begin standout-mode - info box
 export LESS_TERMCAP_us=$'\E[38;5;167m'  # begin underline
 export LESS_TERMCAP_ue=$'\E[0m'         # end underline
+
+# ssh auto complete
+complete -W "$(cat ~/.ssh/known_hosts 2>&1|  cut -f 1 -d ' ' | sed -e s/,.*//g | grep -v '^#' |  uniq | grep -v '\[';\
+               cat ~/.ssh/config 2>&1| grep '^Host ' | grep -v '*' |  awk '{print $2}')" ssh
+
+# virtualenvwrapper
+if [ -f /usr/local/bin/virtualenvwrapper.sh ]; then
+    export WORKON_HOME=~/.env
+    source /usr/local/bin/virtualenvwrapper.sh
+fi
+
+function tunnel()
+{
+    if [ $# != 4 ]; then
+        echo "tunnel <LOCAL PORT> <DEST HOST> <DEST PORT> <host>"
+    else
+        ssh -NfL $1:$2:$3 $4
+    fi
+}
+
+function docker-shell()
+{
+    docker exec -it $1 /bin/bash
+}
 
 #
 # Uncompresses raw zlib compressed data.
@@ -283,3 +328,4 @@ transfer() {
 gui(){
 	nohup $@ &>/dev/null &
 }
+
