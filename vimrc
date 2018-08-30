@@ -36,8 +36,8 @@ Plug 'junegunn/fzf'
 
 " TaskWiki + VimWiki
 
-"Plug 'vimwiki/vimwiki'
-"Plug 'tbabej/taskwiki'
+Plug 'vimwiki/vimwiki'
+Plug 'tbabej/taskwiki'
 
 "Load colortheme and syntax coloring last
 Plug 'frankier/neovim-colors-solarized-truecolor-only'

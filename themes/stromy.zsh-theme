@@ -20,5 +20,8 @@ vcs_status() {
         git_prompt_info
     fi
 }
-
-PROMPT='%{$fg[green]%}%2~ %{$reset_color%}$(vcs_status)»%b '
+if [[ $UID == 0 || $EUID == 0 ]]; then
+	PROMPT='%{$fg[red]%}א %2~ %{$reset_color%}»%b '
+else
+	PROMPT='%{$fg[green]%}א %2~ %{$reset_color%}»%b '
+fi
