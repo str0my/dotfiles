@@ -1,4 +1,13 @@
 let g:python2_host_prog = '/usr/bin/python'
+
+" Check if vim-plug installed
+if empty(glob('~/.vim/autoload/plug.vim'))
+    echo "Installing vim-plug..."
+    silent !curl -sfLo ~/.vim/autoload/plug.vim --create-dirs
+      \ https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
+
 " Plugin Manager
 call plug#begin("~/.vim/plugins")
 
@@ -7,13 +16,16 @@ Plug 'ctrlpvim/ctrlp.vim'
 Plug 'ervandew/supertab'
 "Plug 'edkolev/tmuxline.vim'
 
+Plug 'SirVer/ultisnips'
+Plug 'honza/vim-snippets'
+Plug 'sheerun/vim-polyglot'
+
 "Look & feel
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
 "Movement enhancements
 Plug 'terryma/vim-expand-region'
-Plug 'justinmk/vim-sneak'
 Plug 'tpope/vim-surround'
 Plug 'christoomey/vim-tmux-navigator'
 Plug 'scrooloose/nerdcommenter'
@@ -21,22 +33,18 @@ Plug 'plasticboy/vim-markdown'
 
 " (Optional) Multi-entry selection UI.
 Plug 'junegunn/fzf'
-"Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
 
 " TaskWiki + VimWiki
 
 "Plug 'vimwiki/vimwiki'
 "Plug 'tbabej/taskwiki'
 
-" OS X Only
-Plug 'gyim/vim-boxdraw'
-
 "Load colortheme and syntax coloring last
 Plug 'frankier/neovim-colors-solarized-truecolor-only'
 call plug#end()
 
 
-" Misc Plugin Configuration
+" VimWiki config - main host only
 let g:vimwiki_list = [{'path': '~/workspace/notes/wiki'},
 										 \{'path': '~/workspace/notes/mwiki', 'syntax':'markdown','ext':'.mdw'}]
 
@@ -47,6 +55,13 @@ let g:vim_markdown_folding_disabled = 1
 let g:airline_theme = 'minimalist'
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail'
+
+
+" Ultsnips!
+let g:UltiSnipsExpandTrigger="<tab>"
+let g:UltiSnipsJumpForwardTrigger="<c-b>"
+let g:UltiSnipsJumpBackwardTrigger="<c-z>"
+let g:polyglot_disabled = ['python']
 
 
 " KeyBinds
@@ -81,14 +96,6 @@ set tags=./tags;/
 " IMproved mode
 set nocompatible 
 
-" Dimensions
-"set lines=50
-"set columns=80
-"set wrap
-"set textwidth=79
-"set colorcolumn=81
-
-
 " Misc
 set backspace=indent,eol,start
 set noerrorbells
@@ -97,7 +104,6 @@ set clipboard=unnamed
 set splitbelow
 set ttimeoutlen=50
 set number
-
 
 " Type w!! to write file as root
 cmap w!! w !sudo tee % >/dev/null
@@ -142,7 +148,6 @@ vmap v <Plug>(expand_region_expand)
 vmap <C-v> <Plug>(expand_region_shrink)
 
 " Colorscheme
-
 if (has("termguicolors"))
   set termguicolors
 endif
