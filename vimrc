@@ -11,6 +11,7 @@ endif
 " Plugin Manager
 call plug#begin("~/.vim/plugins")
 
+Plug 'altercation/vim-colors-solarized'
 Plug 'scrooloose/nerdtree'
 Plug 'ctrlpvim/ctrlp.vim'
 Plug 'ervandew/supertab'
@@ -36,11 +37,11 @@ Plug 'junegunn/fzf'
 
 " TaskWiki + VimWiki
 
-Plug 'vimwiki/vimwiki'
-Plug 'tbabej/taskwiki'
+"Plug 'vimwiki/vimwiki'
+"Plug 'tbabej/taskwiki'
 
 "Load colortheme and syntax coloring last
-Plug 'frankier/neovim-colors-solarized-truecolor-only'
+"Plug 'frankier/neovim-colors-solarized-truecolor-only'
 call plug#end()
 
 
